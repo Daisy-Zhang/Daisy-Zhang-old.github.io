@@ -6,7 +6,7 @@
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
   <link rel="dns-prefetch" href="https://Daisy-Zhang.github.io">
-  <title>Daichi Zhang的博客</title>
+  <title>Daisy Zhang的博客</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="长路漫漫">
 <meta property="og:type" content="website">
@@ -46,7 +46,6 @@
 	<header id="header" class="inner">
 		<a href="/" class="profilepic">
 			<img src="/img/avatar.jpeg" class="js-avatar">
-      Daichi Zhang 的博客
 		</a>
 		<hgroup>
 		  <h1 class="header-author"><a href="/"></a></h1>
@@ -267,7 +266,59 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        
+        <p>Transformer最初提出与使用是在NLP领域，在2020年被迁移运用到CV领域并且大放异彩，在AAAI2020、CVPR2020等会议上都是大热的topic，最近在组会的论文分享上介绍了Transformer，顺便写下这篇博客用作学习笔记。</p>
+<h2 id="Attention-is-All-you-Need-（NIPS-2017）"><a href="#Attention-is-All-you-Need-（NIPS-2017）" class="headerlink" title="Attention is All you Need.（NIPS 2017）"></a>Attention is All you Need.（NIPS 2017）</h2><p>（Ashish Vaswani, Noam Shazeer, Niki Parmar, Jakob Uszkoreit, Llion Jones, Aidan N. Gomez, Lukasz Kaiser, Illia Polosukhin: Attention is All you Need. NIPS 2017: 5998-6008）</p>
+<p>由Google Brain团队在NIPS 2017上提出。</p>
+<p>该论文的Motivation：</p>
+<ol>
+<li>LSTM, RNN, Gated Neural Networks 存在的问题：当处理的句子长度过长时，位置<strong>距离大</strong>的单词会丢失联系；</li>
+<li>注意力机制（Attention Mechanism）可以很好地解决上述问题：单词的独立性与联系与其在input或者output中的<strong>位置和距离</strong>无关。</li>
+</ol>
+<p>该论文的Contribution：提出了基于注意力机制的Transformer框架。</p>
+<p>所提出的框架图示如下：</p>
+<p><img src="/img/Transformer_arch.png"></p>
+<p>该结构主体为Encoder-Decoder结构，在该论文的原始实现中，是采用了<strong>6</strong>层Encoder与<strong>6</strong>层Decoder的结构，同时每层包括两个子层，在子层之间使用了残差跳层，同时加入了Normalization层。一个简单直观的示例如下：</p>
+<p><img src="/img/Transformer_arch.png"></p>
+<p>在框架中Input和Output处的Embedding模块的作用是：将输入的句子转为向量；Softmax层的模块作用是：对于某些任务输入预测下一个词的出现概率。</p>
+<p>框架中涉及到的Attention模块之一：<strong>Scaled Dot-Product Attention</strong>的结构如下图所示：</p>
+<p><img src="/img/ScaledDot-ProductAttention.png"></p>
+<p>对Attention的理解：映射query和一系列key-value对到输出；涉及变量包括query(Q),keys(K),values(V),output；</p>
+<p>计算公式如下，其中$$d_{k}$$为Q和K的维度，$$d_{v}$$为V的维度：</p>
+<p><img src="/img/att.png"></p>
+<p>自注意力机制就是上述公式中Q、K、V取相同。</p>
+<p>下图是一个更直观的注意力机制的理解示例图以及Q、K、V的初始化：</p>
+<p><img src="/img/att_ex.png"></p>
+<p><img src="/img/QKV.png"></p>
+<p>在Decoder中的Mask作用是：通过mask操作在矩阵乘法中使后续位置的attention值置为0，从而忽略当前时间之后的信息：</p>
+<p><img src="/img/mask.png"></p>
+<p>基于上述注意力模块的Multi-head注意力模块如下图：</p>
+<p><img src="/img/Multi-head.png"></p>
+<p>其本质是对通过h个不同的线性变换对Q，K，V进行投影(对W矩阵进行线性变换) 再将不同的结果拼接起来，对应公式如下：</p>
+<p><img src="/img/Multi-head2.png"></p>
+<p>框架中涉及的Position-wise Feed-Forward Networks实质上是带一个relu激活函数的两层线性变换，因此其与位置无关，公式如下：</p>
+<p><img src="/img/feed.png"></p>
+<p>Positional Encoding模块的目的是在数据预处理部分加入位置信息,否则句子中word的位置信息会丢失。编码公式如下图：</p>
+<p><img src="/img/PostionalEncoding.png"></p>
+<p>该公式类似傅立叶变换，其编码后的特点是：每个位置有一个唯一的positional encoding；两个位置之间的关系可以通过他们位置编码间的仿射变换来获得。一个作该位置编码的例子如下：</p>
+<p><img src="/img/Pos-ex.png"></p>
+<p>该框架使用注意力机制的优点：</p>
+<ol>
+<li><p>每层的时间复杂度(Complexity per Layer)</p>
+</li>
+<li><p>可以被并行化的计算(Sequential Operations)</p>
+</li>
+<li><p>长度为n的数据前后向传播过程中涉及的神经元最大数量(类比CNN中的感知野)</p>
+</li>
+</ol>
+<p><img src="/img/add.png"></p>
+<p>该框架的缺点：</p>
+<ol>
+<li>CNN与RNN在处理某些情形时原本的优势，如局部性丧失了</li>
+<li>Transformer并非图灵完备(computationally universal)</li>
+</ol>
+<p>两个实验的结果，分别是翻译任务和Parser任务：</p>
+<p><img src="/img/exp.png"></p>
+<h2 id="Transformers-for-Image-Recognition-at-Scale"><a href="#Transformers-for-Image-Recognition-at-Scale" class="headerlink" title="Transformers for Image Recognition at Scale."></a>Transformers for Image Recognition at Scale.</h2>
       
 
       
