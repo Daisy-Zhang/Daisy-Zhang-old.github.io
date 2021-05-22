@@ -29,8 +29,11 @@
 <meta property="og:image" content="https://daisy-zhang.github.io/img/Pos-ex.png">
 <meta property="og:image" content="https://daisy-zhang.github.io/img/add.png">
 <meta property="og:image" content="https://daisy-zhang.github.io/img/exp.png">
+<meta property="og:image" content="https://daisy-zhang.github.io/img/ViT.png">
+<meta property="og:image" content="https://daisy-zhang.github.io/img/ViT-exp.png">
+<meta property="og:image" content="https://daisy-zhang.github.io/img/milestone.png">
 <meta property="article:published_time" content="2021-05-22T03:08:56.000Z">
-<meta property="article:modified_time" content="2021-05-22T12:25:32.729Z">
+<meta property="article:modified_time" content="2021-05-22T15:06:28.418Z">
 <meta property="article:author" content="Daichi Zhang">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://daisy-zhang.github.io/img/Transformer_arch.png">
@@ -227,7 +230,32 @@
 </ol>
 <p>两个实验的结果，分别是翻译任务和Parser任务：</p>
 <p><img src="/img/exp.png"></p>
-<h2 id="Transformers-for-Image-Recognition-at-Scale"><a href="#Transformers-for-Image-Recognition-at-Scale" class="headerlink" title="Transformers for Image Recognition at Scale."></a>Transformers for Image Recognition at Scale.</h2>
+<h2 id="Transformers-for-Image-Recognition-at-Scale"><a href="#Transformers-for-Image-Recognition-at-Scale" class="headerlink" title="Transformers for Image Recognition at Scale."></a>Transformers for Image Recognition at Scale.</h2><p>这篇2020年同样由Google Brain团队发表的工作是将Transformer第一次用于CV领域的论文，被命名为**Vision Transformer (ViT)**，该论文开源了源码，github为：<a target="_blank" rel="noopener" href="https://github.com/google-research/vision_transformer">https://github.com/google-research/vision_transformer</a></p>
+<p>该论文的motivation笔者认为有以下几点：</p>
+<ol>
+<li><p>CV领域，卷积神经网络依旧为主流</p>
+</li>
+<li><p>有研究者尝试将注意力机制与卷积网络相结合，但由于所设计的注意力模块的专一性（ specialized ），效果不佳</p>
+</li>
+<li><p>希望能够尽可能不改变原Transformer的结构与算法将其运用至CV领域（图像分类任务）</p>
+</li>
+</ol>
+<p>该论文的主要contribution是提出了ViT的框架，并且实验结果表明其效果impressive。</p>
+<p>该论文提出的ViT的框架图如下：</p>
+<p><img src="/img/ViT.png"></p>
+<p>其主要做法是类比NLP领域中的Transformer，将图片分割后作为word排序后输入原架构的Transformer中，进而训练网络进行分类任务。</p>
+<p>在图片分类任务上ViT的实验结果表现如下：</p>
+<p><img src="/img/ViT-exp.png"></p>
+<p>不过该提出的框架有以下缺点：</p>
+<ol>
+<li>和原本的Transformer一样，ViT会失去CNN网络结构原本的特点，如局部性等</li>
+<li>实验表明，该模型只有在大数据集上<strong>（14M-300M images）</strong>进行训练时才会有期望的表现。</li>
+</ol>
+<p>相较而言，该模型能否用于其他任务，第2点的影响更大。</p>
+<h2 id="写在最后"><a href="#写在最后" class="headerlink" title="写在最后"></a>写在最后</h2><p>最后梳理一下最近相关工作的milestone：</p>
+<p><img src="/img/milestone.png"></p>
+<p>以上是最近学习Transformer时的一些笔记与心得。</p>
+
       
 
       
@@ -348,7 +376,7 @@
                 </span>
                 <span class="tooltip-content">
                     <div class="toc-article">
-                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Attention-is-All-you-Need-%EF%BC%88NIPS-2017%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">Attention is All you Need.（NIPS 2017）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Transformers-for-Image-Recognition-at-Scale"><span class="toc-number">2.</span> <span class="toc-text">Transformers for Image Recognition at Scale.</span></a></li></ol>
+                    <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Attention-is-All-you-Need-%EF%BC%88NIPS-2017%EF%BC%89"><span class="toc-number">1.</span> <span class="toc-text">Attention is All you Need.（NIPS 2017）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Transformers-for-Image-Recognition-at-Scale"><span class="toc-number">2.</span> <span class="toc-text">Transformers for Image Recognition at Scale.</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%86%99%E5%9C%A8%E6%9C%80%E5%90%8E"><span class="toc-number">3.</span> <span class="toc-text">写在最后</span></a></li></ol>
                     </div>
                 </span>
             </div>
